@@ -1,0 +1,69 @@
+##############################################################################################################
+variables
+##############################################################################################################
+1. Syntax
+---------
+Variable is the name given to a memory location to store a value of a specific type
+var age int // variable declaration
+age = 29 //assignment
+var age int = 29 // variable declaration with initial value
+
+2. Type inference
+-----------------
+ var age = 29 // type will be inferred
+ variable is declared using the syntax var name = initialvalue, 
+ Go will automatically infer the type of that variable from the initial value.
+
+3.Multiple variable declaration 
+-------------------------------
+var width, height int = 100, 50 //declaring multiple variables
+var width, height = 100, 50 //"int" is dropped , Its also correct
+
+// initial value assigned automatically
+var width, height int
+fmt.Println("width is", width, "height is", height)
+
+4.  declare variables of different types
+----------------------------------------------
+var (
+        name   = "naveen"
+        age    = 29
+        height int
+    )
+    
+5. Short hand declaration
+--------------------------
+ it uses := operator
+  name, age := "naveen", 29 //short hand declaration
+  
+// Short hand declaration requires initial values for all variables in the left hand side of the assignment.
+  name, age := "naveen" //error
+  
+// Short hand syntax can only be used when at least one of the variables in the left side of := is newly declared
+ #Working syntax
+ a, b := 20, 30 // declare variables a and b
+ b, c := 40, 50 // b is already declared but c is new
+ b, c = 80, 90 // assign new values to already declared variables b and c (note here we used only = operator)
+ 
+ #Error syntax
+ a, b := 20, 30 //a and b declared
+ fmt.Println("a is", a, "b is", b)
+ a, b := 40, 50 //error, no new variables
+ 
+6. strongly typed
+---------------------
+Go is strongly typed, variables declared as belonging to one type cannot be assigned a value of another type
+age := 29      // age is int
+age = "naveen" // error since we are trying to assign a string to a variable of type int
+
+
+
+ 
+ 
+ 
+ 
+ 
+  
+  
+  
+  
