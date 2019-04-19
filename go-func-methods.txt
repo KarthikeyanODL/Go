@@ -114,7 +114,9 @@ func main() {
 
 3. Pointer receivers vs value receivers
 ----------------------------------------
- It is possible to create methods with pointer receivers. The difference between value and pointer receiver is, changes made inside a method with a pointer receiver is visible to the caller whereas this is not the case in value receiver
+ It is possible to create methods with pointer receivers. The difference between value and pointer receiver is, 
+ changes made inside a method with a pointer receiver is visible to the caller 
+ whereas this is not the case in value receiver
 
 package main
 import (  
@@ -209,7 +211,8 @@ func main() {
 
 6. Pointer receivers in methods vs pointer arguments in functions.
 ---------------------------------------------------------------------
-Functions with pointer arguments will accept only pointers whereas methods with pointer receivers will accept both value and pointer receiver.
+Functions with pointer arguments will accept only pointers whereas methods with pointer receivers will accept 
+both value and pointer receiver.
 
 package main
 import (  
@@ -255,7 +258,8 @@ So far, all the structs and the methods on structs we defined where all located 
 package main
 func (a int) add(b int) {}
 func main() {}
-In the program above, we are trying to add a method named add on the built in type int. This is not allowed since the definition of the method add and the definition of type int are not in the same package. 
+In the program above, we are trying to add a method named add on the built in type int. 
+This is not allowed since the definition of the method add and the definition of type int are not in the same package. 
 
 package main
 import "fmt"
