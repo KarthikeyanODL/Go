@@ -1,0 +1,145 @@
+############################################################################################################
+ Pointer
+############################################################################################################
+
+A pointer is a variable which stores the memory address of another variable.
+*T is the type of the pointer variable which points to a value of type T.
+
+func main() {  
+    b := 255
+    var a *int = &b
+    fmt.Printf("Type of a is %T\n", a)
+    fmt.Println("address of b is", a)
+}
+
+output:
+Type of a is *int  
+address of b is 0x1040a124  
+
+1. The zero value of a pointer is nil.
+------------------------------------------
+func main() {  
+    a := 25
+    var b *int
+    if b == nil {
+        fmt.Println("b is", b)
+        b = &a
+        fmt.Println("b after initialization is", b)
+    }}
+ 
+ 2. Creating pointers using the new function
+ ---------------------------------------------
+ The new function takes a type as argument and returns a pointer to a newly allocated zero value of the type passed as argument.
+ 
+ func main() {  
+    size := new(int)
+    fmt.Printf("Size value is %d, type is %T, address is %v\n", *size, size, size)
+    *size = 85
+    fmt.Println("New size value is", *size)
+}
+
+output:
+-------
+Size value is 0, type is *int, address is 0x414020  
+New size value is 85  
+ 
+ 3. Dereferencing a pointer
+ ------------------------------
+ *a is the syntax to deference a.
+ func main() {  
+    b := 255
+    a := &b
+    fmt.Println("address of b is", a)
+    fmt.Println("value of b is", *a)
+}
+
+output:
+address of b is 0x1040a124  
+value of b is 255  
+
+// another example
+func main() {  
+    b := 255
+    a := &b
+    fmt.Println("address of b is", a)
+    fmt.Println("value of b is", *a)
+    *a++
+    fmt.Println("new value of b is", b)
+}
+output:
+-------
+address of b is 0x1040a124  
+value of b is 255  
+new value of b is 256  
+
+4. Passing pointer to a function
+-----------------------------------
+func change(val *int) {  
+    *val = 55
+}
+func main() {  
+    a := 58
+    fmt.Println("value of a before function call is",a)
+    b := &a
+    change(b)
+    fmt.Println("value of a after function call is", a)
+}
+
+
+output:
+value of a before function call is 58  
+value of a after function call is 55  
+
+
+5. Returning pointer from a function
+--------------------------------------
+
+func hello() *int {  
+    i := 5
+    return &i
+}
+func main() {  
+    d := hello()
+    fmt.Println("Value of d", *d)
+}
+
+output:
+Value of d 5  
+
+6. Do not pass a pointer to an array as a argument to a function. Use slice instead.
+-----------------------------------------------------------------------------------
+
+package main
+import (  
+    "fmt"
+)
+
+func modify(arr *[3]int) {  
+    arr[0] = 90
+}
+
+func main() {  
+    a := [3]int{89, 90, 91}
+    modify(&a)
+    fmt.Println(a)
+}
+
+output:
+[90 90 91]
+
+the same program using slices.
+------------------------------
+package main
+import (  
+    "fmt"
+)
+func modify(sls []int) {  
+    sls[0] = 90
+}
+
+func main() {  
+    a := [3]int{89, 90, 91}
+    modify(a[:])
+    fmt.Println(a)
+}
+
