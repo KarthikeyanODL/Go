@@ -248,7 +248,9 @@ func main() {
 
 7. Methods on non struct types
 ---------------------------------
-To define a method on a type, the definition of the receiver type of the method and the definition of the method should be in the same package. So far, all the structs and the methods on structs we defined where all located in the same main package and hence they worked.
+To define a method on a type, the definition of the receiver type of the method and the definition of the method should be in the same
+package. 
+So far, all the structs and the methods on structs we defined where all located in the same main package and hence they worked.
 
 package main
 func (a int) add(b int) {}
