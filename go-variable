@@ -57,6 +57,22 @@ age := 29      // age is int
 age = "naveen" // error since we are trying to assign a string to a variable of type int
 
 
+###################################################################################################
+constants
+###################################################################################################
+
+1. internal-constant
+--------------------
+var a int = 50  
+var b string = "I love Go" 
+a and b are assigned to constants 50 and I love Go respectively. 
+Even though we do not explicitly use the keyword const anywhere in the above code, internally they are constants in Go
+
+2. The value of a constant should be known at compile time
+--------------------------------------------------------
+var a = math.Sqrt(4)//allowed
+const b = math.Sqrt(4)//not allowed
+
 
  
  
