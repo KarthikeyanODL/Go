@@ -1,0 +1,185 @@
+####################################################################################################################
+IF and Else
+####################################################################################################################
+
+1. Syntax
+--------
+if condition {  
+}
+the {  } are mandatory even if there is only one statement between the { }
+
+
+if condition {  
+} else if condition {
+} else {
+}
+
+2. one-more-variant of IF
+-------------------------
+
+if statement; condition {  
+}
+
+ if num := 10; num % 2 == 0 { //checks if number is even
+     fmt.Println(num,"is even") 
+ }  else {
+      fmt.Println(num,"is odd")
+ }
+// Note : the scope of num is limited to the if else blocks.
+
+3. Gotcha
+-------------
+else statement should start in the same line after the closing curly brace } of the if statement. If not the compiler will complain.
+if{
+}  
+else { // compiler Error || The reason is because of the way Go inserts semicolons automatically. 
+}
+
+####################################################################################################################
+Loops
+####################################################################################################################
+A loop statement is used to execute a block of code repeatedly.
+
+> for is the only loop available in Go
+
+1. Syntax
+----------
+for initialisation; condition; post {  
+}
+
+ex:
+ for i := 1; i <= 10; i++ {
+     fmt.Printf(" %d",i)
+ }
+ 
+ 2.  break & continue & Labels
+ -----------------------------
+  break statement is used to terminate the for loop
+  continue statement is used to skip the current iteration
+  Labels can be used to break the outer loop from inside the inner for loop. 
+  
+  ex:
+  func main() {  
+  outer:  
+    for i := 0; i < 3; i++ {
+        for j := 1; j < 4; j++ {
+            fmt.Printf("i = %d , j = %d\n", i, j)
+            if i == j {
+                break outer
+            }
+        }
+    }
+}
+  
+3. variations of for loop
+---------------------------
+// initialisation, condition and post are optional
+>> ex1
+func main() {  
+    i := 0
+    for ;i <= 10; { // initialisation and post are omitted
+        fmt.Printf("%d ", i)
+        i += 2
+    }
+}
+>>ex2
+func main() {  
+    i := 0
+    for i <= 10 { //semicolons are ommitted and only condition is present
+        fmt.Printf("%d ", i)
+        i += 2
+    }
+}
+
+4. Declare and operate on multiple variables in for loop
+-----------------------------------------------------------
+func main() {  
+    for no, i := 10, 1; i <= 10 && no <= 19; i, no = i+1, no+1 { //multiple initialisation and increment
+        fmt.Printf("%d * %d = %d\n", no, i, no*i)
+    }
+}
+
+5. infinite loop
+-----------------
+for {  
+}
+
+
+####################################################################################################################
+Switch
+####################################################################################################################
+
+1.　Syntax
+ーーーーーーーーーー
+func main() {  
+    finger := 4
+    switch finger {
+    case 1:
+        fmt.Println("Thumb")
+    case 2:
+        fmt.Println("Index")
+    }
+}
+
+2. Declaration
+--------------
+func main() {  
+    switch finger := 8; finger {   // Declaration
+    case 1:
+        fmt.Println("Thumb")
+    default: //default case
+        fmt.Println("incorrect finger number")
+    }
+}
+
+3. Multiple expressions in case
+--------------------------------
+func main() {  
+    letter := "i"
+    switch letter {
+    case "a", "e", "i", "o", "u": //multiple expressions in case
+        fmt.Println("vowel")
+    default:
+        fmt.Println("not a vowel")
+    }
+}
+
+4. Expressionless switch
+---------------------------
+If the expression is omitted, the switch is considered to be switch true
+
+func main() {  
+    num := 75
+    switch { // expression is omitted
+    case num >= 0 && num <= 50:
+        fmt.Println("num is greater than 0 and less than 50")
+    case num >= 51 && num <= 100:
+        fmt.Println("num is greater than 51 and less than 100")
+    case num >= 101:
+        fmt.Println("num is greater than 100")
+    }
+}
+
+5. Fallthrough
+--------------
+>> A fallthrough statement is used to transfer control to the first statement of the case 
+   that is present immediately after the case which has been executed.
+>> fallthrough should be the last statement in a case
+func main() {
+    num := 75
+    switch  { //num is not a constant
+    case num < 50:
+        fmt.Printf("%d is lesser than 50\n", num)
+        fallthrough
+    case num < 100:
+        fmt.Printf("%d is lesser than 100\n", num)
+        fallthrough
+    case num < 200:
+        fmt.Printf("%d is lesser than 200", num)
+    }
+}
+
+otput:
+75 is lesser than 100  
+75 is lesser than 200 
+    
