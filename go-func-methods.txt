@@ -1,0 +1,276 @@
+########################################################################################################################
+Function:
+#########################################################################################################################
+
+1. Syntax
+----------
+func functionname(parametername type) returntype {  
+ //function body
+}
+
+Ex
+func calculateBill(price int, no int) int {  
+    var totalPrice = price * no
+    return totalPrice
+}
+If consecutive parameters are of the same type, we can avoid writing the type each time and it is enough to be written once at the end
+func calculateBill(price, no int) int {  
+    var totalPrice = price * no
+    return totalPrice
+}
+
+2. Multiple return values
+-----------------------
+func rectProps(length, width float64)(float64, float64) {  
+    var area = length * width
+    var perimeter = (length + width) * 2
+    return area, perimeter
+}
+
+func main() {  
+     area, perimeter := rectProps(10.8, 5.6)
+    fmt.Printf("Area %f Perimeter %f", area, perimeter) 
+}
+
+3. Named return values
+----------------------
+func rectProps(length, width float64)(area, perimeter float64) {  
+    area = length * width
+    perimeter = (length + width) * 2
+    return //no explicit return value
+}
+
+Since area and perimeter are specified in the function declaration as return values, they are automatically returned from the function 
+when a return statement in encountered.
+
+
+4.Blank Identifier
+------------------
+
+What if we only need the area and want to discard the perimeter. This is where _ is of use.
+func rectProps(length, width float64) (float64, float64) {  
+    var area = length * width
+    var perimeter = (length + width) * 2
+    return area, perimeter
+}
+func main() {  
+    area, _ := rectProps(10.8, 5.6) // perimeter is discarded
+    fmt.Printf("Area %f ", area)
+}
+
+
+########################################################################################################################
+Methods
+########################################################################################################################
+
+A method is just a function with a special receiver type that is written between the func keyword and the method name
+The receiver is available for access inside the method.
+
+1. Syntax
+----------
+func (t Type) methodName(parameter list) {  
+}
+
+2. Methods vs Functions . Why methods needed ?
+----------------------------------------------
+-> Go is not a pure object oriented programming language and it does not support classes. Hence methods on types is a way to achieve behaviour similar to classes
+-> Methods with same name can be defined on different types whereas functions with the same names are not allowed
+
+Ex:
+package main
+import (  
+    "fmt"
+    "math"
+)
+
+type Rectangle struct {  
+    length int
+    width  int
+}
+
+type Circle struct {  
+    radius float64
+}
+
+func (r Rectangle) Area() int {  
+    return r.length * r.width
+}
+
+func (c Circle) Area() float64 {  
+    return math.Pi * c.radius * c.radius
+}
+
+func main() {  
+    r := Rectangle{
+        length: 10,
+        width:  5,
+    }
+    fmt.Printf("Area of rectangle %d\n", r.Area())
+    c := Circle{
+        radius: 12,
+    }
+    fmt.Printf("Area of circle %f", c.Area())
+}
+
+3. Pointer receivers vs value receivers
+----------------------------------------
+ It is possible to create methods with pointer receivers. The difference between value and pointer receiver is, changes made inside a method with a pointer receiver is visible to the caller whereas this is not the case in value receiver
+
+package main
+import (  
+    "fmt"
+)
+
+type Employee struct {  
+    name string
+    age  int
+}
+
+/*
+Method with value receiver  
+*/
+func (e Employee) changeName(newName string) {  
+    e.name = newName
+}
+
+/*
+Method with pointer receiver  
+*/
+func (e *Employee) changeAge(newAge int) {  
+    e.age = newAge
+}
+
+func main() {  
+    e := Employee{
+        name: "Mark Andrew",
+        age:  50,
+    }
+    fmt.Printf("Employee name before change: %s", e.name)
+    e.changeName("Michael Andrew")
+    fmt.Printf("\nEmployee name after change: %s", e.name)
+
+    fmt.Printf("\n\nEmployee age before change: %d", e.age)
+    (&e).changeAge(51)   // we use  e.changeAge(51) instead of (&e).changeAge(51) and it prints the same output (Go changes internally)
+    fmt.Printf("\nEmployee age after change: %d", e.age)
+}
+
+Output:
+Employee name before change: Mark Andrew  
+Employee name after change: Mark Andrew
+
+Employee age before change: 50  
+Employee age after change: 51  
+
+4. When to use pointer receiver and when to use value receiver
+-----------------------------------------------------------
+-> value receiver expensive to copy the struct but pointer refer the same address
+-> If we need to reflect the changes to the caller
+
+5. Value receivers in methods vs value arguments in functions
+------------------------------------------------------------
+When a function has a value argument, it will accept only a value argument.
+When a method has a value receiver, it will accept both pointer and value receivers.
+
+Ex:
+package main
+import (  
+    "fmt"
+)
+type rectangle struct {  
+    length int
+    width  int
+}
+
+func area(r rectangle) {  
+    fmt.Printf("Area Function result: %d\n", (r.length * r.width))
+}
+
+func (r rectangle) area() {  
+    fmt.Printf("Area Method result: %d\n", (r.length * r.width))
+}
+
+func main() {  
+    r := rectangle{
+        length: 10,
+        width:  5,
+    }
+    area(r)
+    r.area()
+
+    p := &r
+    /*
+       compilation error, cannot use p (type *rectangle) as type rectangle 
+       in argument to area  
+    */
+    //area(p)
+
+    p.area()//calling value receiver with a pointer
+}
+
+6. Pointer receivers in methods vs pointer arguments in functions.
+---------------------------------------------------------------------
+Functions with pointer arguments will accept only pointers whereas methods with pointer receivers will accept both value and pointer receiver.
+
+package main
+import (  
+    "fmt"
+)
+type rectangle struct {  
+    length int
+    width  int
+}
+
+func perimeter(r *rectangle) {  
+    fmt.Println("perimeter function output:", 2*(r.length+r.width))
+}
+
+func (r *rectangle) perimeter() {  
+    fmt.Println("perimeter method output:", 2*(r.length+r.width))
+}
+
+func main() {  
+    r := rectangle{
+        length: 10,
+        width:  5,
+    }
+    p := &r //pointer to r
+    perimeter(p)
+    p.perimeter()
+
+    /*
+        cannot use r (type rectangle) as type *rectangle in argument to perimeter
+    */
+    //perimeter(r)
+    r.perimeter()//calling pointer receiver with a value
+}
+
+
+
+7. Methods on non struct types
+---------------------------------
+To define a method on a type, the definition of the receiver type of the method and the definition of the method should be in the same package. So far, all the structs and the methods on structs we defined where all located in the same main package and hence they worked.
+
+package main
+func (a int) add(b int) {}
+func main() {}
+In the program above, we are trying to add a method named add on the built in type int. This is not allowed since the definition of the method add and the definition of type int are not in the same package. 
+
+package main
+import "fmt"
+
+type myInt int
+
+func (a myInt) add(b myInt) myInt {  
+    return a + b
+}
+func main() {  
+    num1 := myInt(5)
+    num2 := myInt(10)
+    sum := num1.add(num2)
+    fmt.Println("Sum is", sum)
+}
+
+
+
+
+
