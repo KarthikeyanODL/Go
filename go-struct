@@ -1,0 +1,194 @@
+##########################################################################################################
+Structure
+##########################################################################################################
+
+A structure is a user defined type which represents a collection of fields. 
+
+1. declaration
+-----------------
+example:
+type Employee struct {  
+    firstName string
+    lastName  string
+    age       int
+}
+
+-----------
+ex:
+
+type Employee struct {  
+    firstName, lastName string
+    age, salary         int
+}
+
+func main() {
+
+    //creating structure using field names
+    emp1 := Employee{
+        firstName: "Sam",
+        age:       25,
+        salary:    500,
+        lastName:  "Anderson",
+    }
+
+    //creating structure without using field names
+    emp2 := Employee{"Thomas", "Paul", 29, 800}
+
+    fmt.Println("Employee 1", emp1)
+    fmt.Println("Employee 2", emp2)
+}
+
+
+It is also possible to specify values for some fields and ignore the rest
+
+2. Accessing individual fields of a struct
+--------------------------------------------
+
+The dot . operator is used to access the individual fields of a structure.
+
+package main
+import (  
+    "fmt"
+)
+
+type Employee struct {  
+    firstName, lastName string
+    age, salary         int
+}
+
+func main() {  
+    emp6 := Employee{"Sam", "Anderson", 55, 6000}
+    fmt.Println("First Name:", emp6.firstName)
+    fmt.Println("Last Name:", emp6.lastName)
+    fmt.Println("Age:", emp6.age)
+    fmt.Printf("Salary: $%d", emp6.salary)
+}
+
+3. Pointers to a struct
+---------------------------
+package main
+import (  
+    "fmt"
+)
+
+type Employee struct {  
+    firstName, lastName string
+    age, salary         int
+}
+
+func main() {  
+    emp8 := &Employee{"Sam", "Anderson", 55, 6000}
+    fmt.Println("First Name:", (*emp8).firstName)
+    fmt.Println("Age:", (*emp8).age)
+}
+
+
+The language gives us the option to use emp8.firstName 
+instead of the explicit dereference (*emp8).firstName to access the firstName field.
+
+
+package main
+import (  
+    "fmt"
+)
+
+type Employee struct {  
+    firstName, lastName string
+    age, salary         int
+}
+
+func main() {  
+    emp8 := &Employee{"Sam", "Anderson", 55, 6000}
+    fmt.Println("First Name:", emp8.firstName)
+    fmt.Println("Age:", emp8.age)
+}
+
+4. Nested structs
+-----------------------
+
+type Address struct {  
+    city, state string
+}
+type Person struct {  
+    name string
+    age int
+    address Address
+}
+
+func main() {  
+    var p Person
+    p.name = "Naveen"
+    p.age = 50
+    p.address = Address {
+        city: "Chicago",
+        state: "Illinois",
+    }
+    fmt.Println("Name:", p.name)
+    fmt.Println("Age:",p.age)
+    fmt.Println("City:",p.address.city)
+    fmt.Println("State:",p.address.state)
+}
+
+
+Another example:
+-----------------
+package main
+import (  
+    "fmt"
+)
+
+type Address struct {  
+    city, state string
+}
+type Person struct {  
+    name string
+    age  int
+    Address
+}
+
+func main() {  
+    var p Person
+    p.name = "Naveen"
+    p.age = 50
+    p.Address = Address{
+        city:  "Chicago",
+        state: "Illinois",
+    }
+    fmt.Println("Name:", p.name)
+    fmt.Println("Age:", p.age)
+    fmt.Println("City:", p.city) //city is promoted field
+    fmt.Println("State:", p.state) //state is promoted field
+}
+
+5. Exported Structs and Fields
+-------------------------------
+If a struct type starts with a capital letter, then it is a exported type and it can be accessed from other packages. 
+Similarly if the fields of a structure start with caps, they can be accessed from other packages.
+
+6. Structs Equality
+------------------------
+
+Structs are value types and are comparable if each of their fields are comparable. 
+Two struct variables are considered equal if their corresponding fields are equal.
+
+type name struct {  
+    firstName string
+    lastName string
+}
+
+func main() {  
+    name1 := name{"Steve", "Jobs"}
+    name2 := name{"Steve", "Jobs"}
+    if name1 == name2 {
+        fmt.Println("name1 and name2 are equal")
+    } else {
+        fmt.Println("name1 and name2 are not equal")
+    }
+}
+output:
+-------
+name1 and name2 are equal  
+
+Struct variables are not comparable if they contain fields which are not comparable
+
+
